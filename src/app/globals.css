@@ -2,25 +2,63 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1a1620;
+
+  /* Plum/wine palette matching the approved reference design. */
+  --color-plum-950: #2c0f28;
+  --color-plum-900: #3a1334;
+  --color-plum-800: #4a1942;
+  --color-plum-700: #5c2153;
+  --color-plum-600: #712a66;
+  --color-plum-500: #8c3574;
+
+  --color-ink: #1a1620;
+  --color-ink-soft: #6b6470;
+
+  --color-cream: #f8f5f2;
+  --color-cream-dark: #f0ebe4;
+
+  --color-accent-green: #2f9e44;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --color-plum-950: var(--color-plum-950);
+  --color-plum-900: var(--color-plum-900);
+  --color-plum-800: var(--color-plum-800);
+  --color-plum-700: var(--color-plum-700);
+  --color-plum-600: var(--color-plum-600);
+  --color-plum-500: var(--color-plum-500);
+
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+
+  --color-cream: var(--color-cream);
+  --color-cream-dark: var(--color-cream-dark);
+
+  --color-accent-green: var(--color-accent-green);
+
+  --font-sans: var(--font-inter);
+  --font-script: var(--font-dancing);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  /* Bumps every rem-based Tailwind text size (and spacing) up proportionally
+     site-wide, so h1/h2/h3/p all read larger without touching every
+     component's className. */
+  font-size: 118.75%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
