@@ -11,6 +11,8 @@
   --color-plum-700: #5c2153;
   --color-plum-600: #712a66;
   --color-plum-500: #8c3574;
+  --color-plum-400: #b565a0;
+  --color-plum-300: #d9a3c9;
 
   --color-ink: #1a1620;
   --color-ink-soft: #6b6470;
@@ -31,6 +33,8 @@
   --color-plum-700: var(--color-plum-700);
   --color-plum-600: var(--color-plum-600);
   --color-plum-500: var(--color-plum-500);
+  --color-plum-400: var(--color-plum-400);
+  --color-plum-300: var(--color-plum-300);
 
   --color-ink: var(--color-ink);
   --color-ink-soft: var(--color-ink-soft);

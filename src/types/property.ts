@@ -57,6 +57,7 @@ export interface IProperty {
   ListAgentFullName?: string | null;
   ListingContractDate?: string | null;
   ModificationTimestamp?: string | null;
+  OriginalEntryTimestamp?: string | null;
   images: string[];
 }
 
@@ -71,7 +72,6 @@ export interface IPropertyDetail extends IProperty {
   CityRegion?: string | null;
   ArchitecturalStyle?: string[] | string | null;
   ContractStatus?: string | null;
-  OriginalEntryTimestamp?: string | null;
   rooms?: IPropertyRoom[];
   priceHistory?: IPriceHistoryEntry[];
 }

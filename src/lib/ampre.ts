@@ -62,6 +62,7 @@ const PROPERTY_SELECT = [
   "ListAgentFullName",
   "ListingContractDate",
   "ModificationTimestamp",
+  "OriginalEntryTimestamp",
 ].join(",");
 
 function typeFilter(type?: PropertyListingType): string | null {
