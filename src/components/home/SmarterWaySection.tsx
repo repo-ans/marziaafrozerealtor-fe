@@ -28,7 +28,7 @@ export default function SmarterWaySection() {
                 <div key={step.number}>
                   <button
                     onClick={() => setActive(isOpen ? -1 : i)}
-                    className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                    className="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left"
                   >
                     <span className="flex items-center gap-4">
                       <span className="text-sm font-semibold text-plum-600">

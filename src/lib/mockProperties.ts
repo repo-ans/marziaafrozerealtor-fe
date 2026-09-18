@@ -120,6 +120,7 @@ export function getMockPropertyByKey(listingKey: string): IPropertyDetail | null
   if (!base) return null;
   return {
     ...base,
+    images: SAMPLE_PHOTOS,
     PublicRemarks:
       "Sample listing description — connect a live AMPRE feed to show real MLS remarks here.",
     LotSizeArea: null,
@@ -128,6 +129,9 @@ export function getMockPropertyByKey(listingKey: string): IPropertyDetail | null
     ParkingTotal: 2,
     AssociationFee: null,
     TaxAnnualAmount: null,
+    CityRegion: `${base.City} District`,
+    ArchitecturalStyle: "Apartment",
+    ContractStatus: "Available",
     rooms: [],
     priceHistory: [],
   };

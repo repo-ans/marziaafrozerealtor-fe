@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fetchProperties } from "@/lib/ampre";
 import type { PropertyListingType, PropertySource } from "@/types/property";
+import { siteConfig } from "@/config/site";
 import PropertyCard from "@/components/property/PropertyCard";
 import Pagination from "@/components/property/Pagination";
 import SearchBar from "@/components/property/SearchBar";
@@ -15,20 +16,29 @@ const TYPE_TABS: { label: string; value: PropertyListingType }[] = [
   { label: "Pre-Construction", value: "pre-construction" },
 ];
 
+const SOURCE_TABS: { label: string; value: PropertySource }[] = [
+  { label: "All Listings", value: "idx" },
+  { label: "My Listings", value: "mine" },
+  { label: `${siteConfig.brokerageShort} Office Listings`, value: "office" },
+];
+
+const TITLES: Record<PropertySource, string> = {
+  idx: "Property Listings",
+  mine: `${siteConfig.agentName}'s Listings`,
+  office: `${siteConfig.brokerage} — Office Listings`,
+};
+
 export default async function PropertyListingsView({
-  source,
-  title,
   basePath,
   searchParams,
 }: {
-  source: PropertySource;
-  title: string;
   basePath: string;
   searchParams: Record<string, string | undefined>;
 }) {
   const page = Number(searchParams.page) || 1;
   const pageSize = Number(searchParams.pageSize) || 12;
   const type = (searchParams.type as PropertyListingType) || "all";
+  const source = (searchParams.source as PropertySource) || "idx";
 
   const { items, total, pageSize: usedPageSize } = await fetchProperties({
     source,
@@ -51,8 +61,31 @@ export default async function PropertyListingsView({
           <SearchBar action={basePath} />
         </div>
 
+        <div className="mb-6 flex justify-center">
+          <div className="inline-flex flex-wrap justify-center gap-1 rounded-full border border-black/10 bg-white p-1">
+            {SOURCE_TABS.map((tab) => {
+              const tabParams = new URLSearchParams(params);
+              if (tab.value === "idx") tabParams.delete("source");
+              else tabParams.set("source", tab.value);
+              tabParams.delete("page");
+              const active = source === tab.value;
+              return (
+                <Link
+                  key={tab.value}
+                  href={`${basePath}?${tabParams.toString()}`}
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+                    active ? "bg-plum-800 text-white" : "text-ink-soft hover:text-ink"
+                  }`}
+                >
+                  {tab.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-          <h1 className="text-2xl font-bold text-ink">{title}</h1>
+          <h1 className="text-2xl font-bold text-ink">{TITLES[source]}</h1>
           <span className="text-sm text-ink-soft">{total} listings found</span>
         </div>
 

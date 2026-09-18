@@ -68,6 +68,10 @@ export interface IPropertyDetail extends IProperty {
   ParkingTotal?: number | null;
   AssociationFee?: number | null;
   TaxAnnualAmount?: number | null;
+  CityRegion?: string | null;
+  ArchitecturalStyle?: string[] | string | null;
+  ContractStatus?: string | null;
+  OriginalEntryTimestamp?: string | null;
   rooms?: IPropertyRoom[];
   priceHistory?: IPriceHistoryEntry[];
 }

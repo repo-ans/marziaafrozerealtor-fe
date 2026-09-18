@@ -1,20 +1,12 @@
-import PropertyListingsView from "@/components/property/PropertyListingsView";
-import { siteConfig } from "@/config/site";
+import { redirect } from "next/navigation";
 
-export const metadata = { title: "My Listings | Marzia Afroze" };
-
-export default async function MyListingsPage({
+export default async function MyListingsRedirect({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const sp = await searchParams;
-  return (
-    <PropertyListingsView
-      source="mine"
-      title={`${siteConfig.agentName}'s Listings`}
-      basePath="/my-listings"
-      searchParams={sp}
-    />
-  );
+  const params = new URLSearchParams(sp as Record<string, string>);
+  params.set("source", "mine");
+  redirect(`/listings?${params.toString()}`);
 }

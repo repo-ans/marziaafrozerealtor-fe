@@ -25,17 +25,6 @@ export const siteConfig = {
     "Whether you are buying your next home or selling your current one, Marzia makes the process simple, clear, and stress-free.",
 } as const;
 
-export const featuredCities = [
-  "Scarborough",
-  "Toronto",
-  "Markham",
-  "Richmond Hill",
-  "Oakville",
-  "Burlington",
-  "Ajax",
-  "Vaughan",
-] as const;
-
 export const provenStats = [
   { value: "50+", label: "Successful Property Transactions for Buying, Selling, and Renting" },
   { value: "98%", label: "Client Satisfaction Rate Across Every Transaction" },

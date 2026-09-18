@@ -5,6 +5,7 @@ interface ContactPayload {
   email?: string;
   phone?: string;
   message?: string;
+  topic?: string;
 }
 
 // Notification wiring (SMTP/Mailgun) is intentionally left as a TODO — plug
@@ -14,9 +15,9 @@ interface ContactPayload {
 export async function POST(req: NextRequest) {
   const body = (await req.json()) as ContactPayload;
 
-  if (!body.name || !body.email || !body.message) {
+  if (!body.name || !body.email) {
     return NextResponse.json(
-      { success: false, message: "Name, email and message are required" },
+      { success: false, message: "Name and email are required" },
       { status: 400 }
     );
   }

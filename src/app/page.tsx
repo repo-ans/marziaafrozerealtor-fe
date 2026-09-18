@@ -21,14 +21,14 @@ export default function Home() {
         eyebrow="Home Selection"
         title="Some Beautiful Homes I Have on Hand"
         subtitle="A selection of beautiful homes I have on hand, offering great guidance for sellers who wants the best price."
-        viewAllHref="/my-listings"
+        viewAllHref="/listings?source=mine"
       />
       <FeaturedRow
         source="office"
         eyebrow={siteConfig.brokerage}
         title="Explore Dream Valley Realty Listings"
         subtitle="Browse active listings from every agent at Dream Valley Realty across the Greater Toronto Area."
-        viewAllHref="/office-listings"
+        viewAllHref="/listings?source=office"
         dark
       />
       <SearchByCitySection />

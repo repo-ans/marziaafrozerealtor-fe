@@ -6,15 +6,20 @@ const EXPLORE_LINKS = [
   { label: "Home", href: "/" },
   { label: "About Marzia", href: "/about" },
   { label: "All Listings", href: "/listings" },
+  { label: "My Listings", href: "/listings?source=mine" },
+  { label: "Office Listings", href: "/listings?source=office" },
+  { label: "Blog", href: "/blogs" },
   { label: "Contact", href: "/contact" },
   { label: "FAQ", href: "/faq" },
 ];
 
 const SERVICE_LINKS = [
-  { label: "My Listings", href: "/my-listings" },
-  { label: "Office Listings", href: "/office-listings" },
-  { label: "Open Houses", href: "/listings?type=open-houses" },
-  { label: "Pre-Construction", href: "/listings?type=pre-construction" },
+  { label: "Buyer's Guide", href: "/buying/buyers-guide" },
+  { label: "First-Time Buyers", href: "/buying/first-time-buyers" },
+  { label: "Seller's Guide", href: "/selling/sellers-guide" },
+  { label: "Home Worth", href: "/selling/home-worth" },
+  { label: "New Listing Alerts", href: "/buying/new-listing-alerts" },
+  { label: "Join Dream Valley Realty", href: "/join-us" },
 ];
 
 export default function Footer() {
@@ -54,7 +59,7 @@ export default function Footer() {
 
         <div>
           <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-white">
-            Services
+            Guides
           </h3>
           <ul className="space-y-2 text-sm">
             {SERVICE_LINKS.map((l) => (

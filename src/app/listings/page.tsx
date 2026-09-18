@@ -8,12 +8,5 @@ export default async function ListingsPage({
   searchParams: Promise<Record<string, string | undefined>>;
 }) {
   const sp = await searchParams;
-  return (
-    <PropertyListingsView
-      source="idx"
-      title="Property Listings"
-      basePath="/listings"
-      searchParams={sp}
-    />
-  );
+  return <PropertyListingsView basePath="/listings" searchParams={sp} />;
 }

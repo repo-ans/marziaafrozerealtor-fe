@@ -16,7 +16,7 @@ export default function FaqAccordion({
         <div key={item.q}>
           <button
             onClick={() => setOpen(open === i ? -1 : i)}
-            className="flex w-full items-center justify-between gap-4 py-4 text-left"
+            className="flex w-full cursor-pointer items-center justify-between gap-4 py-4 text-left"
           >
             <span className="text-sm font-semibold text-ink">
               {i + 1}. {item.q}

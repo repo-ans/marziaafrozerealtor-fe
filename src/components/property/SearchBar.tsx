@@ -35,7 +35,7 @@ export default function SearchBar({
       />
       <button
         type="submit"
-        className="flex items-center gap-1.5 bg-plum-800 px-5 text-sm font-semibold text-white transition hover:bg-plum-700"
+        className="flex cursor-pointer items-center gap-1.5 bg-plum-800 px-5 text-sm font-semibold text-white transition hover:bg-plum-700"
       >
         <Search size={15} /> Search
       </button>

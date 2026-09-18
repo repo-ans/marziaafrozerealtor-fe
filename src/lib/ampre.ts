@@ -8,32 +8,34 @@ import type {
 import { getMockProperties, getMockPropertyByKey } from "@/lib/mockProperties";
 
 // Same provider Dream Valley Realty's own site uses: TRREB's MLS data via
-// AMPRE's RESO Web API (OData v4). Three access tiers, same pattern as
-// dvr-website-backend's properties.controller.ts:
-//   - IDX:    all public active listings (general search / "All Listings")
-//   - OFFICE: scoped to the brokerage (ListOfficeName eq '<brokerage>')
-//   - AGENT:  scoped to Marzia specifically (ListAgentFullName eq '<agent>')
+// AMPRE's RESO Web API (OData v4). Three access tiers, matching the real
+// tokens issued to DVR (dvr-website-backend uses the same names):
+//   - IDX: all public active listings (general search / "All Listings")
+//   - DLA: the brokerage's own feed (used for both "Office Listings" and,
+//          with an added ListAgentFullName filter, "My Listings")
+//   - VOW: full access incl. sold/closed — reserved for a future
+//          login-gated sold-history feature, not used yet.
 const AMPRE_BASE = "https://query.ampre.ca/odata";
 
 const OFFICE_NAME = process.env.AMPRE_OFFICE_NAME || "DREAM VALLEY REALTY INC.";
 const AGENT_NAME = process.env.AMPRE_AGENT_NAME || "Marzia Afroze";
 
-type FeedTier = "idx" | "office" | "agent";
+type FeedTier = "idx" | "dla" | "vow";
 
 function tokenFor(tier: FeedTier): string | undefined {
+  const fallback = process.env.AMPRE_TOKEN_DVR || process.env.AMPRE_TOKEN;
   switch (tier) {
     case "idx":
-      return process.env.AMPRE_TOKEN_IDX || process.env.AMPRE_TOKEN;
-    case "office":
-      return process.env.AMPRE_TOKEN_OFFICE || process.env.AMPRE_TOKEN;
-    case "agent":
-      return process.env.AMPRE_TOKEN_AGENT || process.env.AMPRE_TOKEN;
+      return process.env.AMPRE_TOKEN_IDX || fallback;
+    case "dla":
+      return process.env.AMPRE_TOKEN_DLA || fallback;
+    case "vow":
+      return process.env.AMPRE_TOKEN_VOW || fallback;
   }
 }
 
 function tierForSource(source: IPropertyFilters["source"]): FeedTier {
-  if (source === "office") return "office";
-  if (source === "mine") return "agent";
+  if (source === "office" || source === "mine") return "dla";
   return "idx";
 }
 
@@ -86,11 +88,16 @@ function isMlsKeyLike(q: string) {
 function buildFilter(filters: IPropertyFilters): string {
   const clauses: string[] = ["StandardStatus eq 'Active'"];
 
-  const tier = tierForSource(filters.source);
-  if (tier === "office") {
+  if (filters.source === "office") {
     clauses.push(`ListOfficeName eq '${OFFICE_NAME.replace(/'/g, "''")}'`);
-  } else if (tier === "agent") {
-    clauses.push(`ListAgentFullName eq '${AGENT_NAME.replace(/'/g, "''")}'`);
+  } else if (filters.source === "mine") {
+    // AMPRE stores ListAgentFullName as "NAME, Designation" (e.g.
+    // "SABBIR KHAN, Broker of Record") — an exact `eq` match on just the
+    // name never hits. `contains` on this server is already
+    // case-insensitive, so a plain substring match on the name handles
+    // both the designation suffix and inconsistent casing across records.
+    const agent = AGENT_NAME.replace(/'/g, "''");
+    clauses.push(`contains(ListAgentFullName,'${agent}')`);
   }
 
   const tf = typeFilter(filters.type);
@@ -192,6 +199,25 @@ export async function fetchProperties(filters: IPropertyFilters): Promise<{
   return { items, total: result["@odata.count"], page, pageSize };
 }
 
+async function fetchAllMediaForListing(
+  listingKey: string,
+  token: string
+): Promise<string[]> {
+  const mediaFilter = encodeURIComponent(
+    `ResourceRecordKey eq '${listingKey.replace(/'/g, "''")}' and ResourceName eq 'Property' ` +
+      `and ImageSizeDescription eq 'Large' and MediaStatus eq 'Active'`
+  );
+  try {
+    const media = await fetchOData<{ value: { MediaURL: string; Order?: number }[] }>(
+      `/Media?$filter=${mediaFilter}&$select=MediaURL,Order&$orderby=Order asc`,
+      token
+    );
+    return media.value.map((m) => m.MediaURL);
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchPropertyByKey(
   listingKey: string
 ): Promise<IPropertyDetail | null> {
@@ -208,7 +234,10 @@ export async function fetchPropertyByKey(
   const property = result.value[0];
   if (!property) return null;
 
-  const [withImages] = await attachThumbnails([{ ...property, images: [] }], token);
+  const images = await fetchAllMediaForListing(listingKey, token);
 
-  return { ...property, images: withImages.images };
+  return {
+    ...property,
+    images: images.length > 0 ? images : ["https://placehold.co/1200x800?text=No+Image"],
+  };
 }

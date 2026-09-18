@@ -63,7 +63,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "sending"}
-        className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-plum-800 transition hover:bg-white/90 disabled:opacity-60 sm:col-span-2 sm:w-fit"
+        className="cursor-pointer rounded-full bg-white px-6 py-3 text-sm font-semibold text-plum-800 transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2 sm:w-fit"
       >
         {status === "sending" ? "Sending..." : "Submit"}
       </button>
